@@ -1,6 +1,5 @@
 package sketchbook;
 
-public class Button {
-	
+public class ToolRect {
 
 }
