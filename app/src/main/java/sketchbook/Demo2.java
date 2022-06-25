@@ -1,185 +1,158 @@
-import javax.swing.*;
-
-import java.awt.*;
-
-import java.util.*;
-
-import javax.swing.JFrame;
-
-import java.awt.event.*;
-
-
-
-public class Demo2 extends JFrame {
-
- 
-
- Demo2() {
-
-  setTitle("마우스로 곡선 그리기");
-
-  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-  MyPanel t = new MyPanel();
-
-  setContentPane(t);
-
-  t.setFocusable(true);
-
-  setSize(300, 300);
-
-  setVisible(true);
-
- }
-
-
-
- public static void main(String[] args) {
-
-  new Demo2();
-
- }
-
-
-
- class MyPanel extends JPanel {
-
-
-
-  Vector<Point> vStart = new Vector<Point>();
-
-
-
-  public MyPanel() {
-
-
-
-   addKeyListener(new KeyListener() {
-
-
-
-    @Override
-
-    public void keyTyped(KeyEvent e) {
-
-     // TODO Auto-generated method stub
-
-
-
-    }
-
-
-
-    @Override
-
-    public void keyReleased(KeyEvent e) {
-
-     // TODO Auto-generated method stub
-
-
-
-    }
-
-
-
-    @Override
-
-    public void keyPressed(KeyEvent e) {
-
-     // TODO Auto-generated method stub
-
-     switch (e.getKeyCode()) {
-
-     case KeyEvent.VK_ENTER:
-
-      vStart.removeAllElements();
-
-      repaint();
-
-      break;
-
-     }
-
-    }
-
-   });
-
-
-
-   addMouseMotionListener(new MouseMotionAdapter() {
-
-    public void mouseDragged(MouseEvent e) { 
-
-     vStart.add(e.getPoint());
-
-     repaint();
-
-
-
-    }
-
-   });
-
-
-
-   // 마우스 이벤트 처리
-
-   addMouseListener(new MouseAdapter() {
-
-    // 마우스를 누르면 호출된다.
-
-    public void mousePressed(MouseEvent e) {
-
-     vStart.add(null);
-
-     vStart.add(e.getPoint());
-
-    }
-
-
-
-   });
-
-
-
-  }
-
-
-
-  public void paintComponent(Graphics g) {
-
-
-
-   super.paintComponent(g);
-
-   g.setColor(Color.BLUE); // 파란색을 선택한다.
-
-
-
-   for (int i = 1; i < vStart.size(); i++) {
-
-
-
-    if (vStart.get(i - 1) == null)
-
-     continue;
-
-    else if (vStart.get(i) == null)
-
-     continue;
-
-    else
-
-     g.drawLine((int) vStart.get(i - 1).getX(), (int) vStart.get(i - 1).getY(),
-
-       (int) vStart.get(i).getX(), (int) vStart.get(i).getY());
-
-
-
-   }
-
-  }
-
- }
-}
-
+//package sketchbook;
+//
+//import java.awt.BasicStroke;
+//import java.awt.Color;
+//
+//
+//import java.awt.Graphics;
+//import java.awt.Graphics2D;
+//import java.awt.Point;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+//import java.awt.event.MouseMotionListener;
+//import java.util.ArrayList;
+//
+//import javax.swing.JPanel;
+//
+//
+//public class Demo2 extends JPanel{
+//	
+//	
+//	Point startP= null;
+//	Point endP=null;
+//	
+//	ArrayList<array> sv = new ArrayList<array>(); 
+//	
+//		
+//	//int strokes = Sketch.stroke;
+////	Color colors = Sketch.color;
+//	
+//	public Demo2(){
+//		//리스너를 공통으로해야  변수들이 공유된다.
+//		MyMouseListener ml = new MyMouseListener();
+//		
+//		
+//		this.addMouseListener(ml); // 리스너
+//		this.addMouseMotionListener(ml);
+//		
+//		//setBackground(Color.WHITE);
+//		
+//		this.setBounds(0, 0, 1200, 800);
+//		this.setBackground(Color.WHITE);
+//		this.setOpaque(true);
+//		Sketch.panel1.add(this);
+//		
+//	}
+//	
+//	class array{
+//		Color color;
+//		int thick;
+//		String tool;
+//		
+//		Point sp;
+//		Point ep;
+//		
+//		array(Color color, int thick, String tool, Point sp, Point ep){
+//			this.color = color;
+//			this.thick = thick;
+//			this.tool = tool;
+//			
+//			this.sp = sp;
+//			this.ep = ep;
+//		}
+//	}
+//	
+//	
+//	//공통 사용 
+//	public void paintComponent(Graphics g){
+//		super.paintComponent(g); // 부모 페인트호출
+//		
+//		array arr = new array(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP);
+////		sv.add(arr);
+//		System.out.println("색깔 : " + Sketch.color );
+//		System.out.println("굵기 : " + Sketch.stroke );
+//		System.out.println("tool " + Sketch.str1 );
+//		System.out.println("start point" + startP );
+//		System.out.println("end point" + endP );
+//		
+//		Graphics2D g2=(Graphics2D)g;
+//		
+//		
+//		if(sv.size() != 0){
+//			
+//			for(array c:sv){ //벡터크기만큼
+//				
+//				g2.setStroke(new BasicStroke(c.thick));
+//				g2.setColor(c.color);
+//				if(c.tool.equals("Pen")) {
+//					
+//				}
+//				if(c.tool.equals("Line")) {
+//					g.drawLine(c.sp.x, c.sp.y, c.ep.x, c.ep.y);//그리다
+//				}
+//				else if(c.tool.equals("Circle")) {
+//					g.drawOval(Math.min(c.sp.x, c.ep.x), Math.min(c.sp.y, c.ep.y),Math.abs(c.ep.x- c.sp.x),Math.abs(c.ep.y- c.sp.y));
+//				}
+//				else if(c.tool.equals("Rectalgle")) {
+//					g.drawRect(Math.min(c.sp.x, c.ep.x), Math.min(c.sp.y, c.ep.y),Math.abs(c.ep.x- c.sp.x),Math.abs(c.ep.y- c.sp.y));
+//				}
+//				else if(c.tool.equals("Mouse")) {
+//					
+//				}
+//				
+//			}
+//		}
+//		if(startP == null) {
+//
+//			if(Sketch.str1.equals("Pen")) {
+//				
+//			}
+//			if(Sketch.str1.equals("Line")) {
+//				g.drawLine(startP.x, startP.y, endP.x, endP.y);	//그리다
+//			}
+//			
+//			else if(Sketch.str1.equals("Circle")) {
+//				g.drawOval(Math.min(startP.x, endP.x), Math.min(startP.y, endP.y),Math.abs(endP.x- startP.x),Math.abs(endP.y- startP.y));
+//			}
+//			else if(Sketch.str1.equals("Rectalgle")) {
+//				g.drawRect(Math.min(startP.x, endP.x), Math.min(startP.y, endP.y),Math.abs(endP.x- startP.x),Math.abs(endP.y- startP.y));
+//			}
+//			else if(Sketch.str1.equals("Mouse")) {
+//				
+//			}
+//		}
+//	}
+//	
+//	
+//	class MyMouseListener extends MouseAdapter implements MouseMotionListener{
+//		public void mousePressed(MouseEvent e){
+//			
+//			startP = e.getPoint();
+//			
+//		}
+//		public void mouseReleased(MouseEvent e){
+//			endP = e.getPoint();	
+//			repaint(); // 다시그려라
+//			
+//			
+//			
+//		}
+//		
+//		public void mouseDragged(MouseEvent e){
+//			endP = e.getPoint();
+//			repaint();
+//			
+//			
+//		}
+//		
+//		public void mouseMoved(MouseEvent e){
+//			
+//		}
+//		
+//		public void mouseEntered(MouseEvent e) {
+//			startP = e.getPoint();
+//			endP = e.getPoint();
+//			System.out.println("Come on");
+//		}
+//	}
+//}

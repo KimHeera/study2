@@ -23,7 +23,6 @@ public class Tool extends JPanel implements ActionListener{
 			case "Line" :{
 				Sketch.str1 = "Line";
 			
-				
 				break;
 			}
 			case "Circle" :{

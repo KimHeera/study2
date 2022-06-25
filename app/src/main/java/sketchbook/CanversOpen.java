@@ -17,17 +17,15 @@ import javax.swing.JPanel;
 
 public class CanversOpen extends JPanel{
 	
-	Point startP=null;
+	
+	Point startP= null;
 	Point endP=null;
 	
-	ArrayList<Point> sv = new ArrayList<Point>(); // 시작
-	ArrayList<Point> se = new ArrayList<Point>(); // 끝점
-//	
-	ArrayList<Integer> s = new ArrayList<Integer>(); // 끝점
+	ArrayList<array> sv = new ArrayList<array>(); 
 	
-	
+		
 	//int strokes = Sketch.stroke;
-	Color colors = Sketch.color;
+//	Color colors = Sketch.color;
 	
 	public CanversOpen(){
 		//리스너를 공통으로해야  변수들이 공유된다.
@@ -46,37 +44,67 @@ public class CanversOpen extends JPanel{
 		
 	}
 	
+	class array{
+		Color color;
+		int thick;
+		String tool;
+		
+		Point sp;
+		Point ep;
+		
+		array(Color color, int thick, String tool, Point sp, Point ep){
+			this.color = color;
+			this.thick = thick;
+			this.tool = tool;
+			
+			this.sp = sp;
+			this.ep = ep;
+		}
+		
+		array(Point sp, Point ep){
+			this.sp = sp;
+			this.ep = ep;
+		}
+	}
+	
 	
 	//공통 사용 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g); // 부모 페인트호출
 		
+		
+		System.out.println("색깔 : " + Sketch.color );
+		System.out.println("굵기 : " + Sketch.stroke );
+		System.out.println("tool " + Sketch.str1 );
+		System.out.println("start point" + startP );
+		System.out.println("end point" + endP );
+		
 		Graphics2D g2=(Graphics2D)g;
 		
-		
-		g2.setStroke(new BasicStroke(Sketch.stroke));
-		g2.setColor(Sketch.color);
+//		array arr = new array(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP);
+//		sv.add(arr);
 		
 		
 		if(sv.size() != 0){
-			for(int i=0;i<se.size();i++){ //벡터크기만큼
-				Point sp = sv.get(i); // 벡터값을꺼내다
-				Point ep = se.get(i);
+			
+			for(array c:sv){ //벡터크기만큼
 				
-				if(Sketch.str1.equals("Pen")) {
-					g.drawLine(sp.x, sp.y, ep.x, ep.y);//그리다
+				g2.setStroke(new BasicStroke(c.thick));
+				g2.setColor(c.color);
+				if(c.tool.equals("Pen")) {
+					
 				}
-				else if(Sketch.str1.equals("line")) {
-					g.drawLine(sp.x, sp.y, ep.x, ep.y);//그리다
+				if(c.tool.equals("Line")) {
+					g.drawLine(c.sp.x, c.sp.y, c.ep.x, c.ep.y);//그리다
 				}
-				else if(Sketch.str1.equals("Circle")) {
-					g.drawOval(Math.min(sp.x, ep.x), Math.min(sp.y, ep.y),Math.abs(ep.x- sp.x),Math.abs(ep.y- sp.y));
+				else if(c.tool.equals("Circle")) {
+					g.drawOval(Math.min(c.sp.x, c.ep.x), Math.min(c.sp.y, c.ep.y),Math.abs(c.ep.x- c.sp.x),Math.abs(c.ep.y- c.sp.y));
 				}
-				else if(Sketch.str1.equals("Rectalgle")) {
-					g.drawRect(Math.min(sp.x, ep.x), Math.min(sp.y, ep.y),Math.abs(ep.x- sp.x),Math.abs(ep.y- sp.y));
+				else if(c.tool.equals("Rectalgle")) {
+					g.drawRect(Math.min(c.sp.x, c.ep.x), Math.min(c.sp.y, c.ep.y),Math.abs(c.ep.x- c.sp.x),Math.abs(c.ep.y- c.sp.y));
 				}
-				else if(Sketch.str1.equals("Mouse")) {
-					g.drawLine(sp.x, sp.y, ep.x, ep.y);//그리다
+				else if(c.tool.equals("Mouse")) {
+					
 				}
 				
 			}
@@ -84,11 +112,12 @@ public class CanversOpen extends JPanel{
 		if(startP != null) {
 
 			if(Sketch.str1.equals("Pen")) {
+				
+			}
+			if(Sketch.str1.equals("Line")) {
 				g.drawLine(startP.x, startP.y, endP.x, endP.y);	//그리다
 			}
-			else if(Sketch.str1.equals("line")) {
-				g.drawLine(startP.x, startP.y, endP.x, endP.y);	//그리다
-			}
+			
 			else if(Sketch.str1.equals("Circle")) {
 				g.drawOval(Math.min(startP.x, endP.x), Math.min(startP.y, endP.y),Math.abs(endP.x- startP.x),Math.abs(endP.y- startP.y));
 			}
@@ -96,31 +125,46 @@ public class CanversOpen extends JPanel{
 				g.drawRect(Math.min(startP.x, endP.x), Math.min(startP.y, endP.y),Math.abs(endP.x- startP.x),Math.abs(endP.y- startP.y));
 			}
 			else if(Sketch.str1.equals("Mouse")) {
-				g.drawLine(startP.x, startP.y, endP.x, endP.y);	//그리다
+				
 			}
 		}
 	}
 	
 	
-	
 	class MyMouseListener extends MouseAdapter implements MouseMotionListener{
 		public void mousePressed(MouseEvent e){
+			
 			startP = e.getPoint();
-			sv.add(e.getPoint()); // 클릭한부분을 시작점으로
+			
 		}
 		public void mouseReleased(MouseEvent e){
-			se.add(e.getPoint()); // 드래그 한부분을 종료점으로
-			endP = e.getPoint();
+			endP = e.getPoint();	
+			new array(startP, endP);
+			
+			array arr = new array(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP);
+			sv.add(arr);
+			
 			repaint(); // 다시그려라
+			
+			
+			
 		}
 		
 		public void mouseDragged(MouseEvent e){
 			endP = e.getPoint();
 			repaint();
+			
+			
 		}
 		
 		public void mouseMoved(MouseEvent e){
 			
+		}
+		
+		public void mouseEntered(MouseEvent e) {
+			startP = e.getPoint();
+			endP = e.getPoint();
+			System.out.println("Come on");
 		}
 	}
 }

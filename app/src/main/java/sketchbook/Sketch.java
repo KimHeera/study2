@@ -27,9 +27,10 @@ public abstract class Sketch extends JFrame{
 	
 	//메인 메소드
 	public static void main(String[] args) {
-		new CanversOpen();
-		menuu(frame);
 		
+		menuu(frame);
+		new CanversOpen();
+	
 		
 	}
 	
@@ -93,7 +94,7 @@ public abstract class Sketch extends JFrame{
 		
 		//프레임에 메뉴넣기 
 		frame.add(menu);
-		
+		 
 //		//패널 사이즈 지정
 		panel1.setLayout(null);
     	panel1.setBounds(0, 50, 1200, 800);
