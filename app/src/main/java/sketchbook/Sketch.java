@@ -9,7 +9,9 @@ public abstract class Sketch extends JFrame{
 	public static JFrame frame = new JFrame();
 	public static String str1 = "Mouse";
 	public static String str2 = "Thickness";
-	public static String str3 = "All clear";
+	public static String str3 = "";
+	
+	public static String str4 = "";
 	
 	public static int stroke = 10;
 	
@@ -54,12 +56,16 @@ public abstract class Sketch extends JFrame{
 		JMenu menu_erase = new JMenu("Eraser");
 		
 		
-		JMenu menu_undo = new JMenu("<-");
-		JMenu menu_redo = new JMenu("->");
+//		JMenu menu_undo = new JMenu("<-");
+//		JMenu menu_redo = new JMenu("->");
 		
-		//MenuAction act = new MenuAction();
-//		menu_undo.addActionListener(act);
-//		menu_redo.addActionListener(act);
+
+		JMenuItem menu_undo = new JMenuItem("<-");
+		JMenuItem menu_redo = new JMenuItem("->");
+		
+		Unredo u = new Unredo();
+		menu_undo.addActionListener(u);
+		menu_redo.addActionListener(u);
 		
 		////////////////////////////////////
 		
@@ -99,13 +105,17 @@ public abstract class Sketch extends JFrame{
 			menu_erase.add(menueraseItem[i]);
 		}
 		
+		
 		//만든 아이템들 모두 메뉴바에 넣기
 		menu.add(menu_tool);
 		menu_tool.add(menu_erase); //tool 메뉴에 erase메뉴 넣주기
 		
+		
+		menu_tool.add(menu_undo);
+		menu_tool.add(menu_redo);
+		
 		menu.add(menu_property);
-		menu.add(menu_undo);
-		menu.add(menu_redo);
+		
 		
 		//프레임에 메뉴넣기 
 		frame.add(menu);

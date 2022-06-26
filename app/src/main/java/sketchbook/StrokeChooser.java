@@ -8,7 +8,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 
 public class StrokeChooser extends JFrame{
-   JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 20,	Sketch.stroke);
+   JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 100,	Sketch.stroke);
    JLabel l = new JLabel();
    
    public StrokeChooser(){
@@ -26,12 +26,12 @@ public class StrokeChooser extends JFrame{
         slider.setMinorTickSpacing(1);
         Sketch.stroke = slider.getValue();
         slider.addChangeListener(new MyChangeListener());
-        l.setText("슬라이더를 움직이세요 : " + Sketch.stroke);
+        l.setText("선택한 굵기 : " + Sketch.stroke);
         l.setBounds(20,20,150,40);
         this.add(l, BorderLayout.NORTH);
         System.out.println(Sketch.stroke);
         this.add(slider, BorderLayout.CENTER);
-        this.setSize(300,300);
+        this.setSize(600,300);
         this.setVisible(true);
    }
     class MyChangeListener implements ChangeListener{

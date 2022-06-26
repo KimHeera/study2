@@ -14,19 +14,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
 
 public class CanversOpen extends JPanel{
 	
+	static Point startP= null;
+	static Point endP=null;
+	static Stack<array> save = new Stack<array>();
 	
-	Point startP= null;
-	Point endP=null;
 	
-	
-	
-	ArrayList<array> sv = new ArrayList<array>();
+	static ArrayList<array> sv = new ArrayList<array>();
 	ArrayList<Point> pp =null;
 	
 
@@ -55,6 +55,8 @@ public class CanversOpen extends JPanel{
 	
 	//공통 사용 
 	public void paintComponent(Graphics g){
+		
+		
 		super.paintComponent(g); // 부모 페인트호출
 		
 		
@@ -67,39 +69,40 @@ public class CanversOpen extends JPanel{
 		Graphics2D g2=(Graphics2D)g;
 		
 		array arr = new array();
-//		sv.add(arr);
-		
-//		penarray pr = new penarray(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP);
-//		if(pr.equals("Pen")) {
-//			p.add(pr);
-//			System.out.println("색깔 : " + pr.color );
-//			System.out.println("굵기 : " + pr.thick );
-//			System.out.println("tool " + pr.tool );
-//			System.out.println("start point" + pr.sp);
-//			System.out.println("end point" + pr.ep );
-//		}
-		
-//		for(penarray curve: p) {
-//			var previousPoint = curve.sp;
-//			for(penarray point: curve) {
-//				g.drawLine(previousPoint.x, previousPoint.y, point.x, point.y);
-//				previousPoint = point;
-//			}
-//		}
-		//docount 수만큼 빼고 아래 저장한 그림 불러오는 코드 실행하기
-		
-		
-		
-		
+
 		
 		if(sv.size() != 0){
+			
+//			if(Sketch.str3.equals("Clear with pixel")) {
+//				g2.setColor(Color.WHITE);
+//				Point previousPoint = c.p.get(0);
+//				for(Point Q :c.p) {
+//					g.drawLine(previousPoint.x, previousPoint.y, Q.x, Q.y);
+//					previousPoint = Q;
+//				}					
+//			}
+//			
+//			if(Sketch.str3.equals("Clear stroke")){
+//				g2.setColor(Color.WHITE);
+//				g.drawLine(c.sp.x, c.sp.y, c.ep.x, c.ep.y);
+//			}
+			
+			
 			System.out.println("크기 " + sv.size() );
 			for(array c:sv){ //벡터크기만큼
+				
+				
 				
 				g2.setStroke(new BasicStroke(c.thick));
 				g2.setColor(c.color);
 				
+				if(c.er.equals("Clear with pixel")) {
+					g2.setColor(Color.WHITE);
+					
+				}
+				
 				if(c.tool.equals("Pen")) {
+					
 					Point previousPoint = c.p.get(0);
 					for(Point Q :c.p) {
 						g.drawLine(previousPoint.x, previousPoint.y, Q.x, Q.y);
@@ -119,7 +122,6 @@ public class CanversOpen extends JPanel{
 				else if(c.tool.equals("Mouse")) {
 					
 				}
-				
 			}
 		}
 		if(startP != null) {
@@ -127,6 +129,11 @@ public class CanversOpen extends JPanel{
 			g2.setColor(Sketch.color);
 
 			if(Sketch.str1.equals("Pen")) {
+//				if(Sketch.str3.equals("Clear with pixel")) {
+//					g2.setColor(Color.WHITE);
+//					
+//				}
+				
 				Point previousPoint = pp.get(0);
 				for(Point c:pp) {
 					g.drawLine(previousPoint.x, previousPoint.y, c.x, c.y);
@@ -148,14 +155,23 @@ public class CanversOpen extends JPanel{
 				
 			}
 		}
-//		
-//		if(Sketch.undo) {
-//			repaint();
-//			Sketch.undo = false;
-//		}
-			
-			
 		
+		////////////////////지우개
+		
+		if(Sketch.str3.equals("Clear with pixel")) {
+			g2.setColor(Color.WHITE);
+			Point previousPoint = pp.get(0);
+			for(Point c:pp) {
+				g.drawLine(previousPoint.x, previousPoint.y, c.x, c.y);
+				previousPoint = c;
+			}
+			
+		}
+		
+		if(Sketch.str3.equals("Clear stroke")){
+			g2.setColor(Color.WHITE);
+			g.drawLine(startP.x, startP.y, endP.x, endP.y);
+		}
 	}
 	
 	
@@ -178,13 +194,13 @@ public class CanversOpen extends JPanel{
 			new array(startP, endP);
 			
 			if(!Sketch.str1.equals("Pen")) {
-				array arr = new array(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP);
+				array arr = new array(Sketch.color, Sketch.stroke, Sketch.str3, Sketch.str1, startP, endP);
 				sv.add(arr);
 			}
 			
 			
 			if(Sketch.str1.equals("Pen")){
-				array arr = new array(Sketch.color, Sketch.stroke, Sketch.str1, startP, endP, pp);
+				array arr = new array(Sketch.color, Sketch.stroke, Sketch.str3,Sketch.str1, startP, endP, pp);
 				sv.add(arr);
 			}
 			
@@ -198,6 +214,7 @@ public class CanversOpen extends JPanel{
 			pp.add(endP);
 			
 			repaint();
+			
 		}
 		
 		public void mouseMoved(MouseEvent e){
@@ -212,10 +229,11 @@ public class CanversOpen extends JPanel{
 		}
 	}
 	
-	class array{
-		Color color;
+	public static class array{
+		static Color color;
 		int thick;
 		String tool;
+		String er;
 		
 		Point sp;
 		Point ep;
@@ -224,19 +242,21 @@ public class CanversOpen extends JPanel{
 		
 		array(){};
 		
-		array(Color color, int thick, String tool, Point sp, Point ep){
+		array(Color color, int thick, String er, String tool, Point sp, Point ep){
 			this.color = color;
 			this.thick = thick;
 			this.tool = tool;
+			this.er = er;
 			
 			this.sp = sp;
 			this.ep = ep;
 		}
 		
-		array(Color color, int thick, String tool, Point sp, Point ep, ArrayList<Point> p){
+		array(Color color, int thick, String er,String tool, Point sp, Point ep, ArrayList<Point> p){
 			this.color = color;
 			this.thick = thick;
 			this.tool = tool;
+			this.er = er;
 			
 			this.sp = sp;
 			this.ep = ep;
@@ -252,18 +272,6 @@ public class CanversOpen extends JPanel{
 			this.ep = ep;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }
