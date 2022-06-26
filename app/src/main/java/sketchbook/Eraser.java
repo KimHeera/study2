@@ -15,7 +15,7 @@ public class Eraser implements ActionListener{
 			case "All clear" :{
 				Sketch.str3 = "All clear";
 				
-//				new CanversOpen();
+			
 				break;
 			}
 			case "Clear with pixel" :{

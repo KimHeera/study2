@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 //String[] itemtooltext = {"Pen", "Line", "Circle", "Rectalgle", "Mouse"};
 
-public class Tool extends JPanel implements ActionListener{
+public class Tool implements ActionListener{
 
 	
 	

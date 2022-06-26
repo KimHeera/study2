@@ -2,10 +2,12 @@ package sketchbook;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public abstract class Sketch extends JFrame{
 	public static JFrame frame = new JFrame();
-	public static String str1 = "Pen";
+	public static String str1 = "Mouse";
 	public static String str2 = "Thickness";
 	public static String str3 = "All clear";
 	
@@ -18,6 +20,12 @@ public abstract class Sketch extends JFrame{
 	
 	static Color color;
 	static JButton colorchange;
+	
+	static boolean undo;
+	static boolean redo;
+	
+	static int docount = 0;
+	
 	
 	
 	
@@ -44,8 +52,14 @@ public abstract class Sketch extends JFrame{
 		JMenu menu_tool = new JMenu("Tool");
 		JMenu menu_property = new JMenu("Property");
 		JMenu menu_erase = new JMenu("Eraser");
+		
+		
 		JMenu menu_undo = new JMenu("<-");
 		JMenu menu_redo = new JMenu("->");
+		
+		//MenuAction act = new MenuAction();
+//		menu_undo.addActionListener(act);
+//		menu_redo.addActionListener(act);
 		
 		////////////////////////////////////
 		
@@ -87,8 +101,9 @@ public abstract class Sketch extends JFrame{
 		
 		//만든 아이템들 모두 메뉴바에 넣기
 		menu.add(menu_tool);
+		menu_tool.add(menu_erase); //tool 메뉴에 erase메뉴 넣주기
+		
 		menu.add(menu_property);
-		menu.add(menu_erase);
 		menu.add(menu_undo);
 		menu.add(menu_redo);
 		
@@ -100,7 +115,7 @@ public abstract class Sketch extends JFrame{
     	panel1.setBounds(0, 50, 1200, 800);
 //    	//패널 색 바꾸기
 		
-		panel1.setBackground(Color.BLACK);
+		panel1.setBackground(Color.WHITE);
 		panel1.setOpaque(true);
 //		
 //		
@@ -138,6 +153,8 @@ public abstract class Sketch extends JFrame{
 		frame.setResizable(true); //프레임크기 조절 가능
 		frame.setVisible(true); //프레임이 보이도록
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //x버튼 활성
+		
+		
 
 		
 	}
