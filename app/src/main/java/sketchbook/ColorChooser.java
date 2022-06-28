@@ -1,6 +1,5 @@
 package sketchbook;
 
-import java.awt.Color;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;

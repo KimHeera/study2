@@ -40,7 +40,7 @@ public class StrokeChooser extends JFrame{
       public void stateChanged(ChangeEvent e) {
          // TODO Auto-generated method stub
          Sketch.stroke = slider.getValue();
-           l.setText("슬라이더를 움직이세요 : "+Sketch.stroke);
+           l.setText("선택한 굵기 : "+Sketch.stroke);
            
       }
     }

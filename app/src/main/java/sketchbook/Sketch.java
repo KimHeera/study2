@@ -20,28 +20,19 @@ public abstract class Sketch extends JFrame{
 	
 	static JLabel outputTool;
 	
-	static Color color;
+	static Color color = Color.BLACK;
 	static JButton colorchange;
+	static JButton pngsave;
 	
-	static boolean undo;
-	static boolean redo;
-	
-	static int docount = 0;
-	
-	
-	
-	
+	static int style = 0;
 	
 	//그림판
 	//기본 GUI 만드는 곳
 	
 	//메인 메소드
 	public static void main(String[] args) {
-		
 		menuu(frame);
 		new CanversOpen();
-	
-		
 	}
 	
 	
@@ -55,11 +46,9 @@ public abstract class Sketch extends JFrame{
 		JMenu menu_property = new JMenu("Property");
 		JMenu menu_erase = new JMenu("Eraser");
 		
-		
 //		JMenu menu_undo = new JMenu("<-");
 //		JMenu menu_redo = new JMenu("->");
 		
-
 		JMenuItem menu_undo = new JMenuItem("<-");
 		JMenuItem menu_redo = new JMenuItem("->");
 		
@@ -72,12 +61,12 @@ public abstract class Sketch extends JFrame{
 		
 		//메뉴 아이템들 만듦, 간단함을 위해 배열로 만들었
 		JMenuItem [] menutoolItem = new JMenuItem [5];
-		JMenuItem [] menupropertyItem = new JMenuItem [2];
-		JMenuItem [] menueraseItem = new JMenuItem [3];
+		JMenuItem [] menupropertyItem = new JMenuItem [4];
+		JMenuItem [] menueraseItem = new JMenuItem [2];
 		
 		String[] itemtooltext = {"Pen", "Line", "Circle", "Rectalgle", "Mouse"};
-		String[] itemprotext = {"Thickness", "Color"};
-		String[] itemerasetext = {"All clear", "Clear with pixel", "Clear stroke"};
+		String[] itemprotext = {"Thickness", "Color", "저장하기", "불러오기"};
+		String[] itemerasetext = {"All clear", "Clear with pixel"};
 		
 		//////////////////////////////////////
 
@@ -105,15 +94,12 @@ public abstract class Sketch extends JFrame{
 			menu_erase.add(menueraseItem[i]);
 		}
 		
+		menu_erase.add(menu_undo);
+		menu_erase.add(menu_redo);
 		
 		//만든 아이템들 모두 메뉴바에 넣기
 		menu.add(menu_tool);
-		menu_tool.add(menu_erase); //tool 메뉴에 erase메뉴 넣주기
-		
-		
-		menu_tool.add(menu_undo);
-		menu_tool.add(menu_redo);
-		
+		menu.add(menu_erase); //tool 메뉴에 erase메뉴 넣주기
 		menu.add(menu_property);
 		
 		
@@ -122,17 +108,12 @@ public abstract class Sketch extends JFrame{
 		 
 //		//패널 사이즈 지정
 		panel1.setLayout(null);
-    	panel1.setBounds(0, 50, 1200, 800);
+    	panel1.setBounds(0, 50, 1200, 600);
 //    	//패널 색 바꾸기
 		
 		panel1.setBackground(Color.WHITE);
 		panel1.setOpaque(true);
-//		
-//		
-//		panel2.setLayout(null);
-//		panel1.setBounds(0, 0, 1200, 30);
-//		panel2.setBackground(Color.BLACK);
-//		panel1.setOpaque(true);
+
 
 //		//현재 뭘 선택했는지 띄우는 라벨 Tool.ver
 		outputTool = new JLabel(str1);
@@ -142,7 +123,6 @@ public abstract class Sketch extends JFrame{
 		frame.add(outputTool, BorderLayout.PAGE_END);
 		
 		colorchange = new JButton();
-		colorchange.setOpaque(true);//배경색 적용을 허용하겠다.
 		colorchange.setBorderPainted(false);	//포커스 표시 설
 		colorchange.setBackground(color);
 		
